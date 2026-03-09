@@ -1,0 +1,53 @@
+Name: Emmanuel Niyonshuti
+Location: Kigali, Rwanda
+Email: emmanuelniyonshuti13@gmail.com
+Phone: +250781390131
+GitHub: https://github.com/EmmanuelNiyonshuti
+Blog: https://blog.niyonshutiemmanuel.com
+
+BACKGROUND
+Backend-focused software developer based in Kigali, Rwanda. Discovered software
+engineering in 2023 while completing a B.Sc. in Crop Production and did a
+year-long ALX Software Engineering programme alongside it. Since graduating,
+worked at two early-stage startups building and maintaining web applications.
+
+TECHNICAL SKILLS
+Languages: Python (primary), JavaScript
+Frameworks: FastAPI, Flask
+Databases: PostgreSQL, MySQL
+Infrastructure: Docker, Nginx, Gunicorn, Linux, SSH
+Other: REST APIs, OAuth2.0, Git
+
+EXPERIENCE
+- Netpipo (Backend Developer, Sep–Dec 2025): Built and shipped backend of an
+  event and booking management system.
+- tecGrw LTD (Software Engineer intern, Apr–Sep 2025): Developed company website and
+  REST API for an AI dashboard.
+- ALX Software Engineering Programme (Aug 2023–Nov 2024): 12-month intensive,
+  project-based software engineering training.
+
+NOTABLE PROJECTS
+- Sentinel NDVI Pipeline: Automated NDVI data ingestion pipeline using Sentinel
+  Hub API, PostgreSQL/PostGIS, FastAPI. Includes scheduling, alerting, and a
+  Streamlit dashboard.
+- whatdeps: CLI tool to check release dates, Python version support, and GitHub
+  activity for Python project dependencies.
+- Contributed to agstack/OpenAgri-IrrigationManagement: open source
+  evapotranspiration and soil moisture analysis service.
+
+WHAT I AM LOOKING FOR
+Backend engineering roles (Python preferred). Open to: backend developer,
+software engineer, API developer, system integrator, associate/junior to
+mid-level positions. Interested in remote or Kigali-based opportunities.
+Comfortable working at early-stage startups. Not looking for frontend-only or
+data science roles.
+
+STRENGTHS
+Strong foundation in building REST APIs from scratch, working with relational
+databases, containerizing services with Docker, and deploying on Linux servers.
+Self-taught, picks things up fast, has shipped real products.
+
+GAPS / HONEST LIMITATIONS
+Less than 2 years of professional experience. Background is not traditional CS —
+came from agriculture. Still building depth in distributed systems and
+large-scale architecture.
