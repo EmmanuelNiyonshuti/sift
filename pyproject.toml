@@ -11,3 +11,8 @@ dependencies = [
     "lxml>=6.0.2",
     "python-dotenv>=1.2.2",
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+]
