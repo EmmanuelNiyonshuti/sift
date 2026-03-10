@@ -12,6 +12,7 @@ dependencies = [
     "httpx>=0.28.1",
     "lxml>=6.0.2",
     "python-dotenv>=1.2.2",
+    "types-aiofiles>=25.1.0.20251011",
 ]
 
 [dependency-groups]

@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import aiofiles
+
 SEEN_JOBS_FILE_PATH = Path(__file__).parent.parent
 BIO_FILE_PATH = Path(__file__).parent.parent
 
@@ -22,37 +24,39 @@ TITLES = [
 ]
 
 
-def load_bio() -> str:
+async def load_bio() -> str:
     """
     lead bio/profile text file and returns its content
     """
     if not bio_file_path.exists():
         return ""
-    with open(bio_file_path, "r") as f:
-        content = f.read()
+    async with aiofiles.open(bio_file_path, "r") as f:
+        content = await f.read()
 
     return content
 
 
-def get_job_seen() -> dict:
+async def get_job_seen() -> list[dict]:
     if not seen_file_path.exists():
         return []
-    with open(seen_file_path) as json_file:
-        content = json_file.read().strip()
+    async with aiofiles.open(seen_file_path) as json_file:
+        content = await json_file.read()
         if not content:
             return []
-        return json.loads(content)
+        return json.loads(content.strip())
 
 
-def add_to_seen(data: list[dict]) -> None:
+async def add_to_seen(data: dict) -> None:
     """
-    takes a job listing and dump it to a json file in the root directory.
-    will create a json file `seen.json` if it does not exists.
+    takes a job listing(a dictionary of job id and title),
+    append it to a list of already seen jobs and writes to a json file in the root directory.
+    will create json file `seen.json` if it does not exists.
     """
-    seen = get_job_seen()
+    seen = await get_job_seen()
     seen.append(data)
-    with open(seen_file_path, "w") as f:
-        json.dump(data, f, indent=2)
+    async with aiofiles.open(seen_file_path, "w") as f:
+        json_data = json.dumps(seen, indent=2)
+        await f.write(json_data)
 
 
 def get_prompt(bio: str, job_listing: dict) -> str:
@@ -76,13 +80,13 @@ be accurate.
 
 Return your response as a JSON object with exactly these fields:
 
-{
+{{
 "score": <integer from 1 to 10>,
 "recommendation": <"apply" | "skip" | "consider">,
 "summary": <one sentence, plain language, why this is or isn't a good fit>,
 "strengths": [<list of specific overlaps between the profile and the job>],
 "gaps": [<list of specific things the job asks for that the profile lacks>]
-}
+}}
 
 Scoring guide:
 - 8-10: Strong match. Most requirements met, apply immediately.
@@ -123,7 +127,7 @@ Description:
         employment_type=employment_type,
         seniority=seniority,
         salary_range=salary_range,
-        description=description,
+        job_description=description,
         experience=experience,
         skills=skills,
     )
