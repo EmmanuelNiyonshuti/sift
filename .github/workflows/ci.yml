@@ -1,0 +1,32 @@
+name: Sift
+
+on: 
+  schedule:
+   - cron: "0 16 * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: install dependencies
+        run: uv sync
+
+      - name: Run main
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: uv run python main.py
+      - name: commit seen.json
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add seen.json
+          git diff --staged --quiet || git commit -m "update seen.json"
+          git push
