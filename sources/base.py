@@ -21,11 +21,11 @@ class Base:
 
             return response.json()
 
-    def already_seen(self, job_listing_id: str) -> bool:
+    async def already_seen(self, job_listing_id: str) -> bool:
         """
         Checks if we already have seen the job listing.
         """
-        job_seen = get_job_seen()
+        job_seen = await get_job_seen()
         if not job_seen:
             return False
         for job in job_seen:
