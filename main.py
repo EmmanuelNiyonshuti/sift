@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 async def evaluate_jobs(
-    job_listings: list[dict], client, bio: str, threshold: int = 0
+    job_listings: list[dict], client, bio: str, threshold: int = 6
 ) -> list:
     """
     Evaluate job listings by passing them into google gemini model and run them concurently with `asyncio.gather`.
