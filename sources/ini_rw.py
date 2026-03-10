@@ -1,29 +1,34 @@
+from dotenv import load_dotenv
+
 from core.data import TITLES, add_to_seen
 from core.utils import strip_html
 
 from .base import Base
 
+load_dotenv()
+
 
 class InRw(Base):
-    def __init__(self, url: str):
+    def __init__(self, url: str = "https://opportunityapi.ini.rw/api/opportunities"):
         super().__init__(url)
 
     def params(self) -> dict:
         return {"status": "approved", "limit": 20}
 
-    def filter(self, job_listings: list[dict]) -> list[dict]:
+    async def filter(self, job_listings: list[dict]) -> list[dict]:
         result = []
-        json_file_list = []
+        seen_jobs = {}
         for job in job_listings:
-            if self.already_seen(job.get("id")):
+            if await self.already_seen(job.get("id")):
                 continue
             if not any(t in job.get("title_en").lower() for t in TITLES):
                 continue
             if not self.is_fresh(job.get("created_at"), job.get("closing_date")):
                 continue
-            json_file_list.append({"id": job.get("id"), "title": job.get("title_en")})
+            seen_jobs.update({"id": job.get("id"), "title": job.get("title_en")})
             result.append(job)
-        add_to_seen(json_file_list)
+        if seen_jobs:
+            await add_to_seen(seen_jobs)
         return result
 
     def normalize(self, job: dict) -> dict:
@@ -42,3 +47,9 @@ class InRw(Base):
             "salary_range": job.get("salary_range_en"),
             "apply_url": job.get("apply_url", ""),
         }
+
+    async def get_normalized_listings(self) -> list[dict]:
+        raw = await self.fetch_job_listings()
+        fresh = await self.filter(raw)
+        normalized_listings = [self.normalize(job) for job in fresh]
+        return normalized_listings
