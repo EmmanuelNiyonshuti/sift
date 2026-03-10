@@ -1,20 +1,24 @@
+import json
+
 from google import genai
 
 
-def get_google_genai_client(self, api_key: str):
+def get_google_genai_async_client(api_key: str):
     assert api_key, "Missing API Key"
-    client = genai.Client(api_key=api_key)
-    return client
+    return genai.Client(api_key=api_key)
 
 
-def validate_match_from_gemini(api_key: str, prompt: str) -> str:
+async def validate_match_from_gemini(genai_client, prompt: str) -> str:
     """
-    Calls gemini-3-flash-preview with job description and profile bio to check if the job can be a good match.
+    Calls gemini-3-flash-preview model with job description and profile bio to check if the job can be a good match.
     """
-    client = get_google_genai_client(api_key=api_key)
-    response = client.models.generate_content(
+    response = await genai_client.aio.models.generate_content(
         model="gemini-3-flash-preview",
         contents=prompt,
     )
-
-    return response.text
+    raw = response.text.strip()
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+    return json.loads(raw.strip())
